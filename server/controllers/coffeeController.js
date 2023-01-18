@@ -105,6 +105,7 @@ coffeeController.addReview = (req, res, next) => {
     .then(response => {
       console.log('review created!')
       console.log(response);
+      res.locals.task = 'add'
       //do we want to update all the rendered reviews to include this new review? array in frontend?
       return next();
     })
@@ -134,12 +135,15 @@ coffeeController.delReview = (req, res, next) => {
   Reviews.findOneAndDelete({_id: _id})
   .then(response => {
     console.log('review deleted!')
+    res.locals.deleted = response;
+    console.log('deleted object ', response)
+    res.locals.task = 'delete';
     return next()
   })
   .catch(err => {
   return next({
-    log: 'addReview error!',
-    message: {err: 'cannot add review!'}
+    log: 'deleteReview error!',
+    message: {err: 'cannot delete review!'}
   })
 })  
 };
@@ -175,9 +179,37 @@ coffeeController.delReview = (req, res, next) => {
 //this controller is to update an individual's review
 //have to save res.locals. to updateAve controller
 
+
 coffeeController.updateReview = (req, res, next) => {
-  
+  console.log('updating reviews..')
+  // Reviews.find()   //store old reviews
+  const { _id, food, drinks, space, sound, outlets, parking, wifi } = req.body;
+  Reviews.findOneAndUpdate({ _id: _id }, { food: food, drinks: drinks, space: space, sound: sound, outlets: outlets, parking: parking, wifi: wifi })
+    .then(response => {
+      console.log('Review updated')
+      res.locals.original = response;
+      console.log('updated original ', res.locals.original)
+      res.locals.task = 'update';
+      return next();
+    })
+    .catch(err => {
+      return next({
+        log: 'updateReview error!',
+        message: {err: 'cannot update review!'}
+      })
+    })
 };
+
+/*
+  Original drinks - 5 stars
+  Updated drinks - 3 stars
+
+  differenece = 3 - 5 = -2
+
+  average = 4.5 * 10 - -2 / 10
+
+*/
+
 
 //thisError occurred while proxying request localhost:8080 controller has to include recalculating averages, updating values in the spots table
 coffeeController.updateAve = async (req, res, next) => {
@@ -192,27 +224,52 @@ coffeeController.updateAve = async (req, res, next) => {
   console.log('req.query ', req.query)
   const queryRows = queryResponse.rows[0];
   console.log('queryReponse:', queryRows);
-  for(const [key, value] of Object.entries(queryRows)) {
-    if(!['reviewcount', '_id', 'name'].includes(key)) {
-      newAveValues[key] = (value * queryRows.reviewcount + req.body[key]) / (queryRows.reviewcount + 1);
+  let reviews = queryRows.reviewcount;
+
+
+  if (res.locals.task === 'delete') {
+    console.log('deleted average')
+    for (const [key, value] of Object.entries(queryRows)) {
+      if(!['reviewcount', '_id', 'name'].includes(key)) {
+        newAveValues[key] = (value * queryRows.reviewcount - req.body[key]) / (queryRows.reviewcount - 1) //res.locals.deleted[key]
+      }
+      // console.log('mapped ave values ', newAveValues)
+    }
+    reviews = queryRows.reviewcount - 1;
+  } else if (res.locals.task === 'add') {
+    for(const [key, value] of Object.entries(queryRows)) {
+      if(!['reviewcount', '_id', 'name'].includes(key)) {
+        newAveValues[key] = (value * queryRows.reviewcount + req.body[key]) / (queryRows.reviewcount + 1);
+      }
+    }
+    reviews = queryRows.reviewcount + 1;
+    console.log('total reviews ', reviews)
+  } else if (res.locals.task === 'update') {
+    for (const [key, value] of Object.entries(queryRows)) {
+      if (!['reviewcount', '_id', 'name'].includes(key)) {
+        const difference = res.locals.original[key] - req.body[key];
+        newAveValues[key] = (value * queryRows.reviewcount - difference) / queryRows.reviewcount;
+      }
     }
   }
-  
+
+    
     console.log('newAveValues: ', newAveValues);
-    const query = 'UPDATE shops SET food=$2, drinks=$3, space=$4, sound=$5, outlets=$6, parking=$7, wifi=$8, reviewcount=$9 WHERE _id=$1';
-    const values = [req.query.shopId, newAveValues.food, newAveValues.drinks, newAveValues.space, newAveValues.sound, newAveValues.outlets, newAveValues.parking, newAveValues.wifi, queryRows.reviewcount + 1];
-    console.log('values array: ', values);
+    const query = 'UPDATE shops SET food=$2, drinks=$3, space=$4, sound=$5, outlets=$6, parking=$7, wifi=$8, reviewcount=$9 WHERE _id=$1;';
+    const values = [req.query.shopId, newAveValues.food, newAveValues.drinks, newAveValues.space, newAveValues.sound, 
+      newAveValues.outlets, newAveValues.parking, newAveValues.wifi, reviews];
+    // console.log('values array: ', values);
     db.query(query, values)
-      .then(res => next())
+      .then(response => {
+        console.log('add new ave response ', response)
+        next()
+      })
       .catch(err => {
         return next({
-          log: 'updateAve error during update request',
-          message: {err: 'Error'}
+          log: `updateAve error during update request ${err}`,
+          message: {err: 'Err', err}
         });
       }) 
-    
-
-
 }
 
 

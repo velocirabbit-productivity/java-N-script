@@ -30,13 +30,13 @@ module.exports = {
 
     CREATE TABLE shops (
       _id serial PRIMARY KEY,
-      food INT DEFAULT 0,
-      drinks INT DEFAULT 0,
-      space INT DEFAULT 0,
-      sound INT DEFAULT 0,
-      outlets INT DEFAULT 0,
-      parking INT DEFAULT 0,
-      wifi INT DEFAULT 0,
+      food DECIMAL ( 6, 3) DEFAULT 0,
+      drinks DECIMAL ( 6, 3) DEFAULT 0,
+      space DECIMAL ( 6, 3) DEFAULT 0,
+      sound DECIMAL ( 6, 3) DEFAULT 0,
+      outlets DECIMAL ( 6, 3) DEFAULT 0,
+      parking DECIMAL ( 6, 3) DEFAULT 0,
+      wifi DECIMAL ( 6, 3) DEFAULT 0,
       name VARCHAR ( 50 ) NOT NULL,
       reviewcount INT DEFAULT 0
     )
