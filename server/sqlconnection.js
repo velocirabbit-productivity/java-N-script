@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { Pool } = require('pg'); //had to npm install pg
 
 // const PG_URI = 'postgres://xryqbhgj:bssNj-4w1ttykBuzhXd0ZMjHeuR7EKCs@mahmud.db.elephantsql.com/xryqbhgj';
