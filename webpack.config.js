@@ -24,9 +24,13 @@ module.exports = {
 
     proxy: {
         '/api': {
-          target: 'http://localhost:3000',//fetching to 3000 from 8080
-          changeOrigin: true,           //cors
-          pathRewrite: { '^/api': '' } //removes /api
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          pathRewrite: { '^/api': '' } 
+        },
+        '/public': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
         },
     },
     hot: true,
