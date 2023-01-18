@@ -1,13 +1,16 @@
 import { Link } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import '../stylesheets/signin.css'
-
+import { Navigate} from "react-router-dom";
 
 const Signup = props => {
     const [ username , SetUsername ] = useState('');
     const [ password , SetPassword ] = useState('');
-
-    const handleSubmit = () => {
+    const [ passwordType, setPasswordType ] = useState('password');
+    const navigate = useNavigate();
+    
+    const handleSubmit = (event) => {
+        event.preventDefault();
         const requestOptions = {
             // mode: 'no-cors',
             method: 'POST',
@@ -17,11 +20,18 @@ const Signup = props => {
 
         // alert('Username: ' + username + ' Password: ' + password)
         //const request = new Request ('http://localhost:3000/api/user/signup')
-    fetch('http://localhost:3000/api/user/signup', requestOptions)
+    fetch('/user/signup', requestOptions)
       .then(response => {
         response.json();
         // alert('resonse status is: ' + response.status)
         alert('You have successfully signed up!');
+        if (!response.ok) {
+            alert('Signup unsuccessful!');
+            navigate(0);
+          } else {
+            navigate('/home', {state:{username: username}});
+          }
+
       })
       .catch(err => console.log(err));      
     }
@@ -36,12 +46,13 @@ const Signup = props => {
                     <label>
                         Password:
                     </label><br></br>
-                        <input type="text" name="password" value={password} placeholder='Enter password' onChange={(e) => SetPassword(e.target.value)}/><br></br>
+                        <input type={passwordType} name="password" value={password} placeholder='Enter password' onChange={(e) => SetPassword(e.target.value)}/><br></br>
                     <input type="submit" value="Sign up!"/>
                 </form>
+                <button onClick={() => {passwordType === 'text' ? setPasswordType('password') : setPasswordType('text')}} >toggle</button>
               <div>
                 <br/>
-                  <Link to="/signin">
+                  <Link to="/">
                      <button className='haveanaccount'>Already have an account?</button>
                   </Link>
               </div>
