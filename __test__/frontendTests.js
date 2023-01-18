@@ -7,7 +7,7 @@ import Signup from '../client/components/SignUp';
 
 describe('Java-N-script testing React components', () => {
 
-    describe('SignIn and SignUp', () => {
+    describe('Signin and Signup', () => {
       let signin, signup;
 
       beforeEach(() => {
@@ -15,8 +15,8 @@ describe('Java-N-script testing React components', () => {
         signup = render(<SignUp />);
       });
   
-      test('Signin', () => {
-        expect(text.getByText("Mega:").nextSibling).toHaveTextContent('Markets');
+      test('Signin and Signup displays Welcome message', () => {
+        expect(signin.getByText("Mega:").nextSibling).toHaveTextContent('Markets');
         expect(text.getByText('Mega:')).toHaveStyle('font-weight: bold')
       });
     });
