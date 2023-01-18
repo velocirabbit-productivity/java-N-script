@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import '../stylesheets/signin.css'
-import { Navigate} from "react-router-dom";
+import { Navigate, useNavigate} from "react-router-dom";
 
 const Signup = props => {
     const [ username , SetUsername ] = useState('');
@@ -20,15 +20,16 @@ const Signup = props => {
 
         // alert('Username: ' + username + ' Password: ' + password)
         //const request = new Request ('http://localhost:3000/api/user/signup')
-    fetch('/user/signup', requestOptions)
+    fetch('/api/user/signup', requestOptions)
       .then(response => {
+        console.log(response);
         response.json();
         // alert('resonse status is: ' + response.status)
-        alert('You have successfully signed up!');
         if (!response.ok) {
             alert('Signup unsuccessful!');
-            navigate(0);
+         //   navigate(0);
           } else {
+            alert('You have successfully signed up!');
             navigate('/home', {state:{username: username}});
           }
 

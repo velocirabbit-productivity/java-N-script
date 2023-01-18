@@ -1,6 +1,7 @@
 const { Pool } = require('pg'); //had to npm install pg
 
-const PG_URI = 'postgres://xryqbhgj:bssNj-4w1ttykBuzhXd0ZMjHeuR7EKCs@mahmud.db.elephantsql.com/xryqbhgj';
+// const PG_URI = 'postgres://xryqbhgj:bssNj-4w1ttykBuzhXd0ZMjHeuR7EKCs@mahmud.db.elephantsql.com/xryqbhgj';
+const PG_URI = 'postgres://jvgedjlf:l5Q9rO4qnztd4OxcqlSHRayol-NLIQnp@kashin.db.elephantsql.com/jvgedjlf';
 
 //connecting to pool to keep this one open constantly (opening/closing takes resources)
 const pool = new Pool({
