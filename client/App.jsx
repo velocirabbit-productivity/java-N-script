@@ -6,7 +6,7 @@ import SignUp from './components/SignUp.jsx'
 import HomePage from './components/HomePage.jsx'
 import Layout from './components/Layout.jsx'
 import ShopList from './components/ShopList.jsx'
-import AuthRoute from "./components/AuthRoute.jsx";
+import Protected from "./components/Protected.jsx";
 
 import { useAuth } from "./context/useAuthContext.jsx";
 
@@ -18,8 +18,8 @@ function App() {
         <Routes>
           <Route index element={<SignIn />} />
           <Route path='/signup' element={<SignUp/>}/>
-          <Route path='/home' element={<HomePage/>}/>
-          <Route path='/shoplist' element={<ShopList/>}/>
+          <Route exact path="/home" element={<Protected><HomePage/></Protected>}/>
+          <Route exact path="/shoplist" element={<Protected><ShopList/></Protected>}/>
         </Routes >
         {/* <SignUp /> */}
         </div>
