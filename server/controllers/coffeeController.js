@@ -96,12 +96,12 @@ coffeeController.readReviews = (req, res, next) => {
   //will this be rendered after they click on shop or with a button
   //a text field? 
 coffeeController.addReview = (req, res, next) => {
-  const { food, drinks, space, sound, outlets, parking, wifi, username } = req.body;
+  const { food, drinks, space, sound, outlets, parking, wifi, username, comment } = req.body;
   const { shopId } = req.query;
   console.log(username);
   console.log('addReview invoked');
   Reviews.create({ shopId, food, drinks, space, sound,
-    outlets, parking, wifi, username})
+    outlets, parking, wifi, username, comment })
     .then(response => {
       console.log('review created!')
       console.log(response);
@@ -111,7 +111,7 @@ coffeeController.addReview = (req, res, next) => {
     })
     .catch(err => {
       return next({
-        log: 'addReview error!',
+        log: `addReview error! ${err}`,
         message: {err: 'cannot add review!'}
       })
     })  
@@ -183,8 +183,8 @@ coffeeController.delReview = (req, res, next) => {
 coffeeController.updateReview = (req, res, next) => {
   console.log('updating reviews..')
   // Reviews.find()   //store old reviews
-  const { _id, food, drinks, space, sound, outlets, parking, wifi } = req.body;
-  Reviews.findOneAndUpdate({ _id: _id }, { food: food, drinks: drinks, space: space, sound: sound, outlets: outlets, parking: parking, wifi: wifi })
+  const { _id, food, drinks, space, sound, outlets, parking, wifi, comment } = req.body;
+  Reviews.findOneAndUpdate({ _id: _id }, { food: food, drinks: drinks, space: space, sound: sound, outlets: outlets, parking: parking, wifi: wifi, comment: comment })
     .then(response => {
       console.log('Review updated')
       res.locals.original = response;
