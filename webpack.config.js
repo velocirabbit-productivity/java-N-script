@@ -26,7 +26,11 @@ module.exports = {
         '/api': {
           target: 'http://localhost:3000',
           changeOrigin: true,
-          pathRewrite: { '^/api': '' }
+          pathRewrite: { '^/api': '' } 
+        },
+        '/public': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
         },
     },
     hot: true,

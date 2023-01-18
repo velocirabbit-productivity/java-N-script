@@ -36,9 +36,10 @@ const Signup = props => {
       })
       .catch(err => console.log(err));      
     }
+    //style={{backgroundImage:'url("https://www.pngfind.com/pngs/m/268-2683291_png-file-svg-hide-password-icon-png-transparent.png")',height:30, width: 30}}
         return (
             <div className='login'>
-                <h1>Welcome to Coffee Shop ☕</h1>
+                <h1>Java-N-Script</h1>
                 <form onSubmit={handleSubmit}>
                     <label>
                         Username:
@@ -47,10 +48,15 @@ const Signup = props => {
                     <label>
                         Password:
                     </label><br></br>
-                        <input type={passwordType} name="password" value={password} placeholder='Enter password' onChange={(e) => SetPassword(e.target.value)}/><br></br>
+                    <div style={{textAlign:'center' }}>
+                        <input type={passwordType} name="password" value={password} placeholder='Enter password' onChange={(e) => SetPassword(e.target.value)}/>
+                        <span id="toggleIcon" onClick={() => {passwordType === 'text' ? setPasswordType('password') : setPasswordType('text')}} >
+                            {passwordType === 'password' ? <img src="public/closeeye.png" style={{width:'1.2em', height:'1.2em'}}/> : <img src="public/openeye.png" style={{width:'1.2em', height:'1.2em'}}/>}
+                        </span>
+                    </div>
+                    <br></br>
                     <input type="submit" value="Sign up!"/>
                 </form>
-                <button onClick={() => {passwordType === 'text' ? setPasswordType('password') : setPasswordType('text')}} >toggle</button>
               <div>
                 <br/>
                   <Link to="/">

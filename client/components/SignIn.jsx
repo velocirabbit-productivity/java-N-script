@@ -44,7 +44,7 @@ const SignIn = (props) => {
 
   return (
       <div className="login">
-          <h1>Welcome to Coffee Shop</h1>
+          <h1>Java-N-Script</h1>
               <div className="username">
                   <label htmlFor="username">Username</label><br></br>
                   <input placeholder='Enter your username' type="text" id="username" name="username" onChange={(e) => handleChange(e)}></input>
