@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // const MONGO_URI = 'mongodb+srv://studyspot:studiousmoles@cluster0.6h0gbc8.mongodb.net/?retryWrites=true&w=majority';
-console.log('URI; ', process.env.MONGO_URI);
+// console.log('URI; ', process.env.MONGO_URI);
 mongoose 
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
