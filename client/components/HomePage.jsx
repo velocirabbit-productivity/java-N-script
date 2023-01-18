@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Link, useLocation } from 'react-router-dom'
+import { useAuth } from "../context/useAuthContext";
 import '../stylesheets/homepage.css'
 
 export default function HomePage(props) {
   const [searchOptions, setSearchOptions] = useState(initSearchOptions);
   const { quality_meals, quality_drinks, space, sound, outlets, parking, wifi, shopname } = searchOptions;
-
+  console.log(useAuth());
   const location = useLocation();
   //const { from } = location.state;
-  const username = location.state.username
+  //const username = location.state.username
+  
+  const { loggedInUser:username } = useAuth();
   console.log('current user from HomePage is ' + location.state.username);
   console.log('username from HomePage is ' + username);
 

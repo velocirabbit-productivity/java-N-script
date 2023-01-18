@@ -6,15 +6,19 @@ import SignUp from './components/SignUp.jsx'
 import HomePage from './components/HomePage.jsx'
 import Layout from './components/Layout.jsx'
 import ShopList from './components/ShopList.jsx'
+import AuthRoute from "./components/AuthRoute.jsx";
+
+import { useAuth } from "./context/useAuthContext.jsx";
 
 function App() {
+  console.log(useAuth());
+
     return (
         <div>
         <Routes>
-          <Route path='/' element={<Layout/>} />
           <Route index element={<SignIn />} />
-          <Route path='/home' element={<HomePage/>}/>
           <Route path='/signup' element={<SignUp/>}/>
+          <Route path='/home' element={<HomePage/>}/>
           <Route path='/shoplist' element={<ShopList/>}/>
         </Routes >
         {/* <SignUp /> */}

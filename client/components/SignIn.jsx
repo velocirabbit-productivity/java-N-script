@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import '../stylesheets/signin.css'
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-
-
+import { useAuth } from '../context/useAuthContext';
 
 const SignIn = (props) => {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
+  const { loggedInUser, setLoggedInUser } = useAuth();
   
   const handleChange = (event) => {
     if (event.target.name == 'username') {
@@ -35,6 +35,7 @@ const SignIn = (props) => {
           //throw Error('Your username or password is incorrect')
           navigate(0);
         } else {
+          setLoggedInUser(username);
           navigate('/home', {state:{username: username}});
         }
     })
