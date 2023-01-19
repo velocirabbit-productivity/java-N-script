@@ -14,7 +14,7 @@ const ShopList = props => {
   
   const fetchShopMatches = () => {
     const query = `?quality_meals=${quality_meals}&quality_drinks=${quality_drinks}&space=${space}&sound=${sound}&outlets=${outlets}&parking=${parking}&wifi=${wifi}`;
-    fetch(`http://localhost:8080/api/coffee/${query}`)
+    fetch(`/api/coffee/${query}`)
       .then(res => res.json())
       .then(res => {
         console.log(res); // array of objects [{}, {}]
