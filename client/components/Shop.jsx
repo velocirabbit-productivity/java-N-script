@@ -5,8 +5,9 @@ import '../stylesheets/shop.css'
 import FocusedShop from './FocusedShop';
 
 export default function Shop(props) {
-    const { drinks, food, name, outlets, parking, sound, space, wifi, _id, fetchShopMatches, currentUser } = props;
-    const replacedName = name.replaceAll('"', '\'');
+    const { drinks, food, shopname, outlets, parking, sound, space, wifi, _id, fetchShopMatches, currentUser } = props;
+    console.log(shopname);
+    const replacedName = shopname.replaceAll('"', '\'');
     console.log('CurrentUser in Shop: ' + currentUser)
     const [ isFocused, setIsFocused ] = useState(false);
     
@@ -28,7 +29,7 @@ export default function Shop(props) {
           {isFocused && <FocusedShop
                              drinks={drinks}
                              food={food}
-                             name={name}
+                             shopname={shopname}
                              outlets={outlets}
                              parking={parking}
                              sound={sound}
