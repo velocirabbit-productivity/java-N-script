@@ -27,7 +27,7 @@ const Signup = props => {
         // alert('resonse status is: ' + response.status)
         if (!response.ok) {
             alert('Signup unsuccessful!');
-         //   navigate(0);
+          navigate(0);
           } else {
             alert('You have successfully signed up!');
             navigate('/home', {state:{username: username}});
