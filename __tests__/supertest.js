@@ -17,7 +17,7 @@ describe('Route integration', () => {
     describe('/user', () => {
         describe('POST', () => {
             it('signup responds with 200 status and /applicaction\/json/ content type', () => {
-                return request(server)
+                const response = request(server)
                     .post('/user/signup')
                     .expect('Content-Type', /applicaction\/json/)
                     .send([{ username: 'hello', password: 'world' }])
