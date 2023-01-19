@@ -8,7 +8,6 @@ authController = {};
 authController.addBcrypt = (req, res, next) => {
   console.log('addBcrypt')
   const { password } = req.body;
-
   const hash = async () => {
     try {
       const newHash = await bcrypt.hash(password, 10);
@@ -18,6 +17,7 @@ authController.addBcrypt = (req, res, next) => {
       console.log('err: ', error)
     }
   }
+  hash();
 }
 
 authController.createUser = (req, res, next) => {
@@ -42,12 +42,20 @@ authController.verifyUser = (req, res, next) => {
   const query = `SELECT password from users WHERE username='${username}'`;
   db.query(query)
     .then(response => {
-      console.log(response.rows);
-      if(response.rows[0].password !== password) return next({
-        log: 'Error at authController.verifyUser - incorrect password',
-        message: {err: 'Username and password do not match'}
-      })
-      return next();
+      bcrypt.compare(password, response.rows[0].password)
+        .then(boolean => {
+          if (!boolean) {
+            next({ log: 'Error in verifyUser - incorrect password'})
+          } else {
+            return next()
+          }
+        })
+      
+      // if(response.rows[0].password !== password) return next({
+      //   log: 'Error at authController.verifyUser - incorrect password',
+      //   message: {err: 'Username and password do not match'}
+      // })
+      // return next();
     })
     .catch(e => next({
       log: 'Error at authController.verifyUser',
@@ -62,19 +70,3 @@ authController.verifyUser = (req, res, next) => {
 
 
 module.exports = authController;
-
-
-
-// const size = process.env.WORKFACTOR
-
-// const hash = async (password, size) => {
-//   try {
-//     const salt = await bcrypt.genSalt(size);
-//     const hash = await bcrypt.hash(password, salt);
-    
-//     return hash;
-//   } catch (error) {
-//     console.log('err: ', error)
-//   }
-// }
-// console.log(hash())
