@@ -22,23 +22,40 @@ const coffeeController = {};
 //controller for searching for coffeeshops by selected criteria
 coffeeController.searchShopsByCriteria = (req, res, next) => {
   console.log('searchShopsByCriteria');
-    const { quality_meals, quality_drinks, space, sound, outlets, parking, wifi } = req.query;
-    const value1 = [quality_meals, quality_drinks, space, sound, outlets, parking, wifi];
-    const selectShopsByCriteria = `SELECT * FROM shops 
-                  WHERE food >= $1 
-                  AND drinks >= $2
-                  AND space >= $3
-                  AND sound >= $4
-                  AND outlets >= $5
-                  AND parking >= $6
-                  AND wifi >= $7`;
+  console.log('req.query ', req.query);
+    const { quality_meals, quality_drinks, space, sound, outlets, parking, wifi, name } = req.query;
+    let value1;
+    let selectShopsByCriteria;
+
+    if (!name) {
+      value1 = [quality_meals, quality_drinks, space, sound, outlets, parking, wifi];
+      selectShopsByCriteria = `SELECT * FROM shops 
+                    WHERE food >= $1 
+                    AND drinks >= $2
+                    AND space >= $3
+                    AND sound >= $4
+                    AND outlets >= $5
+                    AND parking >= $6
+                    AND wifi >= $7`;
+    } else {
+      value1 = [quality_meals, quality_drinks, space, sound, outlets, parking, wifi, name];
+      selectShopsByCriteria = `SELECT * FROM shops 
+                    WHERE food >= $1 
+                    AND drinks >= $2
+                    AND space >= $3
+                    AND sound >= $4
+                    AND outlets >= $5
+                    AND parking >= $6
+                    AND wifi >= $7
+                    AND name = $8`;
+    }
 // const test = 'SELECT * FROM spots'
     db.query(selectShopsByCriteria, value1)
       .then(response => {
         // console.log('response ',response)
         console.log('response rows', response.rows)
         res.locals.readShops = response.rows; 
-        console.log(response.rows);
+        // console.log(response.rows);
         return next();
       })
       .catch(err => {
@@ -48,6 +65,9 @@ coffeeController.searchShopsByCriteria = (req, res, next) => {
         })
       })
 }
+
+/*
+No longer need the searchByName feature
 
 //controller for searching for coffee shop by name
 //after searching by name, what renders, and what's the next click?
@@ -69,6 +89,7 @@ coffeeController.searchShopsByName = (req, res, next) => {
       })
     })
 }
+*/
 
 
 //is there a way to make it so that in this controller, if the user has made a review, it'll pin that review to the top?
