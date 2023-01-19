@@ -18,7 +18,7 @@ module.exports = {
         // directory: path.join(__dirname, './client/index.html')
     },
     compress: true,
-    // host: 'localhost',
+    host: 'localhost',
     port: 8080,
     // headers: { 'Access-Control-Allow-Origin': '*' },
 
@@ -35,7 +35,7 @@ module.exports = {
     },
     hot: true,
     open: true,
-    historyApiFallback: true,
+    historyApiFallback: true,   //refresh page with react router
 },
     
 mode: process.env.NODE_ENV,

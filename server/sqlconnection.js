@@ -7,7 +7,7 @@ const PG_URI = process.env.PG_URI;
 
 //connecting to pool to keep this one open constantly (opening/closing takes resources)
 const pool = new Pool({
-    connectionString: PG_URI
+    connectionString: process.env.PG_URI
 });
 
 
@@ -19,3 +19,25 @@ module.exports = {
     return pool.query(text, params, callback);
   }
 }
+
+
+/*
+    CREATE TABLE users (
+      user_id serial PRIMARY KEY,
+      username VARCHAR ( 50 ) NOT NULL,
+      password VARCHAR ( 200 ) NOT NULL
+    )
+
+    CREATE TABLE shops (
+      _id serial PRIMARY KEY,
+      food DECIMAL ( 6, 3) DEFAULT 0,
+      drinks DECIMAL ( 6, 3) DEFAULT 0,
+      space DECIMAL ( 6, 3) DEFAULT 0,
+      sound DECIMAL ( 6, 3) DEFAULT 0,
+      outlets DECIMAL ( 6, 3) DEFAULT 0,
+      parking DECIMAL ( 6, 3) DEFAULT 0,
+      wifi DECIMAL ( 6, 3) DEFAULT 0,
+      name VARCHAR ( 50 ) NOT NULL,
+      reviewcount INT DEFAULT 0
+    )
+*/
