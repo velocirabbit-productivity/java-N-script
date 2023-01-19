@@ -5,8 +5,8 @@ import '../stylesheets/focusedshop.css';
 
 export default function FocusedShop(props) {
     const [reviews, setReviews] = useState([]);
-    const { drinks, food, name, outlets, parking, sound, space, wifi, _id, setIsFocused, fetchShopMatches, currentUser } = props;
-    const replacedName = name.replaceAll('"', '\'');
+    const { drinks, food, shopname, outlets, parking, sound, space, wifi, _id, setIsFocused, fetchShopMatches, currentUser } = props;
+    const replacedName = shopname.replaceAll('"', '\'');
     console.log("id ", _id)
     const [ addReview, setAddReview ] = useState({
         drinks: 0,
@@ -141,8 +141,8 @@ export default function FocusedShop(props) {
                     <span onClick={() => setAddReview(Object.assign({}, {...addReview}, {wifi: 5}))}className={addReview.wifi >= 5 ? 'fa fa-star checked' : 'fa fa-star star'}></span>
                 </div>
             </div>
-            
-
+            <br/>
+            <textarea  type="text" placeholder='Leave a comment here!'/>
             <button className='addReview-btn' onClick={() => handleAddReviewClick()}>Add Review</button>
         </div>
     </div>

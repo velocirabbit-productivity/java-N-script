@@ -3,29 +3,26 @@ import { Link, useLocation } from 'react-router-dom'
 import '../stylesheets/homepage.css'
 
 export default function HomePage(props) {
+  const initSearchOptions = {
+    quality_meals: 1,
+    quality_drinks: 1,
+    space: 1,
+    sound: 1,
+    outlets: 1,
+    parking: 1,
+    wifi: 1,
+    shopname: ''
+  };
   const [searchOptions, setSearchOptions] = useState(initSearchOptions);
   const { quality_meals, quality_drinks, space, sound, outlets, parking, wifi, shopname } = searchOptions;
-
-  const location = useLocation();
-  //const { from } = location.state;
-  const username = location.state.username
-  console.log('current user from HomePage is ' + location.state.username);
-  console.log('username from HomePage is ' + username);
+  const { username } = useLocation().state;
 
   const handleChange = event => {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        console.log(name);
-        setSearchOptions(Object.assign({}, searchOptions, {[name]:value}));
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    setSearchOptions(Object.assign({}, searchOptions, {[name]: value}));
   }
-
-  const handleChangeSearch = event => {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        setSearchOptions(Object.assign({}, searchOptions, {[name]:value}));
-    }
 
   return (
     <div className="homePageForms">
@@ -35,46 +32,44 @@ export default function HomePage(props) {
             <br/>
           <label>
             Meal quality: 
-            <input type='number' name='quality_meals' value={quality_meals} onChange={handleChange} />
+            <input type='number' min = '0' max = '5' name='quality_meals' value={quality_meals} onChange={handleChange} />
           </label>
           <br/>
           <label>
             Drink quality: 
-            <input type='number' name='quality_drinks' value={quality_drinks} onChange={handleChange} />
+            <input type='number' min = '0' max = '5' name='quality_drinks' value={quality_drinks} onChange={handleChange} />
           </label>
           <br />
           <label>
             Atmosphere: 
-            <input type='number' name='space' value={space} onChange={handleChange} />
+            <input type='number' min = '0' max = '5' name='space' value={space} onChange={handleChange} />
           </label>
           <br />
           <label>
             Noise level: 
-            <input type='number' name='sound' value={sound} onChange={handleChange} />
+            <input type='number' min = '0' max = '5' name='sound' value={sound} onChange={handleChange} />
           </label>
           <br />
           <label>
             Outlet availability: 
-            <input type='number' name='outlets' value={outlets} onChange={handleChange} />
+            <input type='number' min = '0' max = '5' name='outlets' value={outlets} onChange={handleChange} />
           </label>
           <br />
           <label>
             Parking options: 
-            <input type='number' name='parking' value={parking} onChange={handleChange} />
+            <input type='number' min = '0' max = '5' name='parking' value={parking} onChange={handleChange} />
           </label>
           <br />
           <label>
             WIFI quality: 
-            <input type='number' name='wifi' value={wifi} onChange={handleChange} />
+            <input type='number' min = '0' max = '5' name='wifi' value={wifi} onChange={handleChange} />
           </label>
           <br />
-            <div className="searchCriteria-btn">
-              <Link to={'/shoplist'}  state={{from: {...searchOptions, username}}}><button>Search</button></Link>
-            </div>
+          <br/>
         </form>
       </div>
       <div className="homepageSearchForm">
-        <input type='text' className="search-bar" value={shopname} onChange={handleChangeSearch} placeholder="Search coffee shop name..." />
+        <input type='text' className="search-bar" name='shopname' value={shopname} onChange={handleChange} placeholder="Search coffee shop name..." />
           <Link to={'/shoplist'} state={{from: {...searchOptions, username}}} >
             <button className="search-bar-button">
               <svg stroke="currentColor" fill="currentColor" viewBox="0 0 1024 1024" height="1.0em" width="1.0em" xmlns="http://www.w3.org/2000/svg">
@@ -86,15 +81,3 @@ export default function HomePage(props) {
     </div>
   ) 
 }
-
-const initSearchOptions = {
-  quality_meals: 1,
-  quality_drinks: 1,
-  space: 1,
-  sound: 1,
-  outlets: 1,
-  parking: 1,
-  wifi: 1,
-  shopname: ''
-};
- //num for food, drinks, space, sound, outlets, parking, wifi
