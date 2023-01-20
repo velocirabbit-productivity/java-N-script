@@ -34,6 +34,7 @@ const ShopList = props => {
         {matches.map((shop) => {
           //after backend updates db, should rename to shopname
           const { drinks, food, name:shopname, outlets, parking, sound, space, wifi, _id } = shop;
+          
           return <Shop 
                  drinks={drinks}
                  food={food}
@@ -43,7 +44,7 @@ const ShopList = props => {
                  sound={sound}
                  space={space}
                  wifi={wifi}
-                 _id={_id}
+                 shopId={_id}
                  key={`shop${_id}`}
                  fetchShopMatches={fetchShopMatches}
                 currentUser = {username}

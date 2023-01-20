@@ -21,7 +21,6 @@ const coffeeController = {};
 
 //controller for searching for coffeeshops by selected criteria
 coffeeController.searchShopsByCriteria = (req, res, next) => {
-  console.log('searchShopsByCriteria');
     const { quality_meals, quality_drinks, space, sound, outlets, parking, wifi } = req.query;
     const value1 = [quality_meals, quality_drinks, space, sound, outlets, parking, wifi];
     const selectShopsByCriteria = `SELECT * FROM shops 
@@ -36,9 +35,7 @@ coffeeController.searchShopsByCriteria = (req, res, next) => {
     db.query(selectShopsByCriteria, value1)
       .then(response => {
         // console.log('response ',response)
-        console.log('response rows', response.rows)
         res.locals.readShops = response.rows; 
-        console.log(response.rows);
         return next();
       })
       .catch(err => {
@@ -52,13 +49,11 @@ coffeeController.searchShopsByCriteria = (req, res, next) => {
 //controller for searching for coffee shop by name
 //after searching by name, what renders, and what's the next click?
 coffeeController.searchShopsByName = (req, res, next) => {
-  console.log('searchShopsByNames invoked');
   const { name } = req.query;
   const query = `SELECT name from shops WHERE shop_name=${name}`;
   
   db.query(query)
     .then(response => {
-      console.log('got the coffee shop you typed requested!');
       res.locals.readShops = response.rows; 
       return next();
     })
@@ -75,12 +70,10 @@ coffeeController.searchShopsByName = (req, res, next) => {
   //and that one review will have update/delete buttons? 
 coffeeController.readReviews = (req, res, next) => {
   const { shopId } = req.query;
-  console.log('readReviews executed');
   
   Reviews.find({shopId})
   .then((response) => {
     res.locals.reviews = response; /// correct response obj?
-    console.log('Got reviews!!');
     return next();
   })
   .catch((err) => {
@@ -128,13 +121,16 @@ coffeeController.addReview = (req, res, next) => {
     // }
     //instead of param queries, send JSON data with review ID and shop ID
 coffeeController.delReview = (req, res, next) => {
+  console.log('deleting review in coffeeController')
   const { _id } = req.body;  
-  const { shopId } = req.query;
-  console.log("shopId: ", _id)
+  console.log('coffeeController ID ', _id)
+  // const {username} = req.body;
+  // console.log('delete review receives username',username)
+  // const { shopId } = req.query;
+  // console.log("shopId: ", _id)
   //delete review
   Reviews.findOneAndDelete({_id: _id})
   .then(response => {
-    console.log('review deleted!')
     res.locals.deleted = response;
     console.log('deleted object ', response)
     res.locals.task = 'delete';
@@ -181,14 +177,11 @@ coffeeController.delReview = (req, res, next) => {
 
 
 coffeeController.updateReview = (req, res, next) => {
-  console.log('updating reviews..')
   // Reviews.find()   //store old reviews
   const { _id, food, drinks, space, sound, outlets, parking, wifi, comment } = req.body;
   Reviews.findOneAndUpdate({ _id: _id }, { food: food, drinks: drinks, space: space, sound: sound, outlets: outlets, parking: parking, wifi: wifi, comment: comment })
     .then(response => {
-      console.log('Review updated')
       res.locals.original = response;
-      console.log('updated original ', res.locals.original)
       res.locals.task = 'update';
       return next();
     })
@@ -213,7 +206,6 @@ coffeeController.updateReview = (req, res, next) => {
 
 //thisError occurred while proxying request localhost:8080 controller has to include recalculating averages, updating values in the spots table
 coffeeController.updateAve = async (req, res, next) => {
-  console.log('updateAve invoked');
   // const { shopId, food, drinks, space, sound, outlets, parking, wifi } = req.body;  
   
   const text = `SELECT * from shops WHERE _id = $1`;
@@ -221,19 +213,15 @@ coffeeController.updateAve = async (req, res, next) => {
 
   const newAveValues = {}; // { name: starbucks, food_avg: 2, drinks_avg: 3}
   const queryResponse =  await db.query(text, value); // [{ name: starbucks, food_avg: 2, drinks_avg: 3, reviewCount: 120}]
-  console.log('req.query ', req.query)
   const queryRows = queryResponse.rows[0];
-  console.log('queryReponse:', queryRows);
   let reviews = queryRows.reviewcount;
 
 
   if (res.locals.task === 'delete') {
-    console.log('deleted average')
     for (const [key, value] of Object.entries(queryRows)) {
       if(!['reviewcount', '_id', 'name'].includes(key)) {
         newAveValues[key] = (value * queryRows.reviewcount - req.body[key]) / (queryRows.reviewcount - 1) //res.locals.deleted[key]
       }
-      // console.log('mapped ave values ', newAveValues)
     }
     reviews = queryRows.reviewcount - 1;
   } else if (res.locals.task === 'add') {
@@ -243,7 +231,6 @@ coffeeController.updateAve = async (req, res, next) => {
       }
     }
     reviews = queryRows.reviewcount + 1;
-    console.log('total reviews ', reviews)
   } else if (res.locals.task === 'update') {
     for (const [key, value] of Object.entries(queryRows)) {
       if (!['reviewcount', '_id', 'name'].includes(key)) {
@@ -254,14 +241,11 @@ coffeeController.updateAve = async (req, res, next) => {
   }
 
     
-    console.log('newAveValues: ', newAveValues);
     const query = 'UPDATE shops SET food=$2, drinks=$3, space=$4, sound=$5, outlets=$6, parking=$7, wifi=$8, reviewcount=$9 WHERE _id=$1;';
     const values = [req.query.shopId, newAveValues.food, newAveValues.drinks, newAveValues.space, newAveValues.sound, 
       newAveValues.outlets, newAveValues.parking, newAveValues.wifi, reviews];
-    // console.log('values array: ', values);
     db.query(query, values)
       .then(response => {
-        console.log('add new ave response ', response)
         next()
       })
       .catch(err => {
