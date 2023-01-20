@@ -5,9 +5,9 @@ import '../stylesheets/focusedshop.css';
 
 export default function FocusedShop(props) {
     const [reviews, setReviews] = useState([]);
-    const { drinks, food, shopname, outlets, parking, sound, space, wifi, _id, setIsFocused, fetchShopMatches, currentUser } = props;
+    const { drinks, food, shopname, outlets, parking, sound, space, wifi, shopId, setIsFocused, fetchShopMatches, currentUser } = props;
     const replacedName = shopname.replaceAll('"', '\'');
-    console.log("id ", _id)
+    console.log("id??????? ", shopId)
     const [ addReview, setAddReview ] = useState({
         drinks: 0,
         food: 0,
@@ -16,13 +16,31 @@ export default function FocusedShop(props) {
         sound: 0,
         space:0,
         wifi:0,
-        shopId: _id,
-        username: currentUser
+        shopId: shopId,
+        username: currentUser,
+        comment: ''
     });
 
+    const resetReview = {
+        drinks: 0,
+        food: 0,
+        outlets: 0,
+        parking: 0,
+        sound: 0,
+        space:0,
+        wifi:0,
+        shopId: shopId,
+        username: currentUser,
+        comment: ''
+    }
+
+    const changeReviewState = (e) => {
+        setAddReview(Object.assign({}, {...addReview}, {comment: e.target.value}));
+        
+    }
     
     useEffect(() => {
-      const query = `?shopId=${_id}`;
+      const query = `?shopId=${shopId}`;
       fetch(`/api/coffee/reviews/${query}`)
         .then(res => res.json())
         .then(res => {
@@ -30,15 +48,14 @@ export default function FocusedShop(props) {
         })
     }, []);
 
-
     const handleAddReviewClick = () => {
-        console.log(currentUser)
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(addReview)
           };
-        const query = `?shopId=${_id}`;
+
+        const query = `?shopId=${shopId}`;
         fetch(`/api/coffee/addreview/${query}`, requestOptions)
           .then(res => res.json())
           .then(res => {
@@ -47,6 +64,8 @@ export default function FocusedShop(props) {
             fetchShopMatches();
         })
           .catch(e => console.log(e));
+        setAddReview(Object.assign({}, {...addReview}, {...resetReview}));
+        document.getElementById('commentInput').value = '';
     }
     
   return (
@@ -55,7 +74,7 @@ export default function FocusedShop(props) {
         <div onClick={() => setIsFocused()} className="exit-focus">X</div>
         <div className="review-container">
             { reviews.map(review => {
-                const { drinks, food, username, outlets, parking, sound, space, wifi} = review;
+                const { _id, drinks, food, username, outlets, parking, sound, space, wifi, comment} = review;
                 return <Review
                     drinks={drinks}
                     food={food}
@@ -66,7 +85,10 @@ export default function FocusedShop(props) {
                     wifi={wifi}
                     username={username}
                     key={_id}
+                    _id={_id}
+                    shopId={shopId}
                     currentUser={currentUser}
+                    comment={comment}
                 />
             })}
         </div>
@@ -138,11 +160,11 @@ export default function FocusedShop(props) {
                     <span onClick={() => setAddReview(Object.assign({}, {...addReview}, {wifi: 2}))} className={addReview.wifi >= 2 ? 'fa fa-star checked' : 'fa fa-star star'}></span>
                     <span onClick={() => setAddReview(Object.assign({}, {...addReview}, {wifi: 3}))} className={addReview.wifi >= 3 ? 'fa fa-star checked' : 'fa fa-star star'}></span>
                     <span onClick={() => setAddReview(Object.assign({}, {...addReview}, {wifi: 4}))} className={addReview.wifi >= 4 ? 'fa fa-star checked' : 'fa fa-star star'}></span>
-                    <span onClick={() => setAddReview(Object.assign({}, {...addReview}, {wifi: 5}))}className={addReview.wifi >= 5 ? 'fa fa-star checked' : 'fa fa-star star'}></span>
+                    <span onClick={() => setAddReview(Object.assign({}, {...addReview}, {wifi: 5}))} className={addReview.wifi >= 5 ? 'fa fa-star checked' : 'fa fa-star star'}></span>
                 </div>
             </div>
             <br/>
-            <textarea  type="text" placeholder='Leave a comment here!'/>
+            <textarea  type="text" id='commentInput' onChange={(e) => {changeReviewState(e)}} placeholder='Leave a comment here!'/>
             <button className='addReview-btn' onClick={() => handleAddReviewClick()}>Add Review</button>
         </div>
     </div>

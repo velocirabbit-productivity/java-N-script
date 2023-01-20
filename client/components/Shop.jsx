@@ -5,7 +5,7 @@ import '../stylesheets/shop.css'
 import FocusedShop from './FocusedShop';
 
 export default function Shop(props) {
-    const { drinks, food, shopname, outlets, parking, sound, space, wifi, _id, fetchShopMatches, currentUser } = props;
+    const { drinks, food, shopname, outlets, parking, sound, space, wifi, shopId, fetchShopMatches, currentUser } = props;
     console.log(shopname);
     const replacedName = shopname.replaceAll('"', '\'');
     console.log('CurrentUser in Shop: ' + currentUser)
@@ -35,8 +35,8 @@ export default function Shop(props) {
                              sound={sound}
                              space={space}
                              wifi={wifi}
-                             _id={_id}
-                             key={`focusedShop${_id}`}
+                             shopId={shopId}
+                             key={`focusedShop${shopId}`}
                              setIsFocused={setIsFocused}
                              fetchShopMatches={fetchShopMatches}
                              currentUser={currentUser}
