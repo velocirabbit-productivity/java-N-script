@@ -21,6 +21,7 @@ const coffeeController = {};
 
 //controller for searching for coffeeshops by selected criteria
 coffeeController.searchShopsByCriteria = (req, res, next) => {
+  console.log('searchShopsByCriteria');
     const { quality_meals, quality_drinks, space, sound, outlets, parking, wifi } = req.query;
     const value1 = [quality_meals, quality_drinks, space, sound, outlets, parking, wifi];
     const selectShopsByCriteria = `SELECT * FROM shops 
@@ -36,6 +37,7 @@ coffeeController.searchShopsByCriteria = (req, res, next) => {
       .then(response => {
         // console.log('response ',response)
         res.locals.readShops = response.rows; 
+        console.log(response.rows);
         return next();
       })
       .catch(err => {
@@ -45,6 +47,9 @@ coffeeController.searchShopsByCriteria = (req, res, next) => {
         })
       })
 }
+
+/*
+No longer need the searchByName feature
 
 //controller for searching for coffee shop by name
 //after searching by name, what renders, and what's the next click?
@@ -64,6 +69,7 @@ coffeeController.searchShopsByName = (req, res, next) => {
       })
     })
 }
+*/
 
 
 //is there a way to make it so that in this controller, if the user has made a review, it'll pin that review to the top?

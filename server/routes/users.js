@@ -2,6 +2,10 @@ const path = require('path');
 const express = require('express');
 const app = express.Router();
 const authController = require('../controllers/authController');
+
+const coffeeController = require('../controllers/coffeeController');
+
+
 const cors = require('cors')
 
 app.use(express.json())
@@ -12,9 +16,14 @@ app.use(express.urlencoded({ extended: true }));
 //     next();
 //   });
 
-app.post('/signup', authController.createUser, (req, res) => { 
+
+app.post('/signup', authController.addBcrypt, authController.createUser, (req, res) => { 
     res.sendStatus(200);
 })
+// app.post('/signup', coffeeController.readReviews, (req, res) => { 
+//         res.sendStatus(200);
+//     })
+
 
 app.post('/login', authController.verifyUser, (req, res) => { 
     res.status(200).json({})
