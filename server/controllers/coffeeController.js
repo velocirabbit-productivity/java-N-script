@@ -22,16 +22,44 @@ const coffeeController = {};
 //controller for searching for coffeeshops by selected criteria
 coffeeController.searchShopsByCriteria = (req, res, next) => {
   console.log('searchShopsByCriteria');
-    const { quality_meals, quality_drinks, space, sound, outlets, parking, wifi } = req.query;
+    const { quality_meals, quality_drinks, space, sound, outlets, parking, wifi, shapname } = req.query;
+
     const value1 = [quality_meals, quality_drinks, space, sound, outlets, parking, wifi];
     const selectShopsByCriteria = `SELECT * FROM shops 
-                  WHERE food >= $1 
-                  AND drinks >= $2
-                  AND space >= $3
-                  AND sound >= $4
-                  AND outlets >= $5
-                  AND parking >= $6
-                  AND wifi >= $7`;
+                    WHERE food >= $1 
+                    AND drinks >= $2
+                    AND space >= $3
+                    AND sound >= $4
+                    AND outlets >= $5
+                    AND parking >= $6
+                    AND wifi >= $7`;
+
+    // let value1;
+    // let selectShopsByCriteria;
+
+    // if (!shopname) {
+    //   value1 = [quality_meals, quality_drinks, space, sound, outlets, parking, wifi];
+    //   selectShopsByCriteria = `SELECT * FROM shops 
+    //                 WHERE food >= $1 
+    //                 AND drinks >= $2
+    //                 AND space >= $3
+    //                 AND sound >= $4
+    //                 AND outlets >= $5
+    //                 AND parking >= $6
+    //                 AND wifi >= $7`;
+    // } else {
+    //   value1 = [quality_meals, quality_drinks, space, sound, outlets, parking, wifi, shopname];
+    //   selectShopsByCriteria = `SELECT * FROM shops 
+    //                 WHERE food >= $1 
+    //                 AND drinks >= $2
+    //                 AND space >= $3
+    //                 AND sound >= $4
+    //                 AND outlets >= $5
+    //                 AND parking >= $6
+    //                 AND wifi >= $7
+    //                 AND name = $8`;
+    // }
+
 // const test = 'SELECT * FROM spots'
     db.query(selectShopsByCriteria, value1)
       .then(response => {
